@@ -52,10 +52,16 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../AdapderExample/main.cpp \
-		../AdapderExample/mainwindow.cpp moc_mainwindow.cpp
-OBJECTS       = main.o \
+SOURCES       = ../AdapderExample/gamecubecontroller.cpp \
+		../AdapderExample/gamecubetousbadapter.cpp \
+		../AdapderExample/main.cpp \
+		../AdapderExample/mainwindow.cpp \
+		../AdapderExample/usbcontroller.cpp moc_mainwindow.cpp
+OBJECTS       = gamecubecontroller.o \
+		gamecubetousbadapter.o \
+		main.o \
 		mainwindow.o \
+		usbcontroller.o \
 		moc_mainwindow.o
 DIST          = /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/common/unix.conf \
@@ -210,6 +216,7 @@ DIST          = /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/qt_config.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/spec_post.prf \
+		../AdapderExample/.qmake.stash \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/toolchain.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/default_pre.prf \
@@ -229,8 +236,16 @@ DIST          = /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/exceptions.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/yacc.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/lex.prf \
-		../AdapderExample/AdapderExample.pro ../AdapderExample/mainwindow.h ../AdapderExample/main.cpp \
-		../AdapderExample/mainwindow.cpp
+		../AdapderExample/AdapderExample.pro ../AdapderExample/USBControllerInt.h \
+		../AdapderExample/gamecubecontroller.h \
+		../AdapderExample/gamecubecontrollerint.h \
+		../AdapderExample/gamecubetousbadapter.h \
+		../AdapderExample/mainwindow.h \
+		../AdapderExample/usbcontroller.h ../AdapderExample/gamecubecontroller.cpp \
+		../AdapderExample/gamecubetousbadapter.cpp \
+		../AdapderExample/main.cpp \
+		../AdapderExample/mainwindow.cpp \
+		../AdapderExample/usbcontroller.cpp
 QMAKE_TARGET  = AdapderExample
 DESTDIR       = 
 TARGET        = AdapderExample
@@ -395,6 +410,7 @@ Makefile: ../AdapderExample/AdapderExample.pro /home/jachm/Qt/5.12.7/gcc_64/mksp
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/qt_config.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/toolchain.prf \
 		/home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/default_pre.prf \
@@ -569,6 +585,7 @@ Makefile: ../AdapderExample/AdapderExample.pro /home/jachm/Qt/5.12.7/gcc_64/mksp
 /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/qt_config.prf:
 /home/jachm/Qt/5.12.7/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/toolchain.prf:
 /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/default_pre.prf:
@@ -604,8 +621,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/jachm/Qt/5.12.7/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../AdapderExample/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../AdapderExample/main.cpp ../AdapderExample/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../AdapderExample/USBControllerInt.h ../AdapderExample/gamecubecontroller.h ../AdapderExample/gamecubecontrollerint.h ../AdapderExample/gamecubetousbadapter.h ../AdapderExample/mainwindow.h ../AdapderExample/usbcontroller.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../AdapderExample/gamecubecontroller.cpp ../AdapderExample/gamecubetousbadapter.cpp ../AdapderExample/main.cpp ../AdapderExample/mainwindow.cpp ../AdapderExample/usbcontroller.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../AdapderExample/mainwindow.ui $(DISTDIR)/
 
 
@@ -773,6 +790,17 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
+gamecubecontroller.o: ../AdapderExample/gamecubecontroller.cpp ../AdapderExample/gamecubecontroller.h \
+		../AdapderExample/gamecubecontrollerint.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gamecubecontroller.o ../AdapderExample/gamecubecontroller.cpp
+
+gamecubetousbadapter.o: ../AdapderExample/gamecubetousbadapter.cpp ../AdapderExample/gamecubetousbadapter.h \
+		../AdapderExample/usbcontroller.h \
+		../AdapderExample/USBControllerInt.h \
+		../AdapderExample/gamecubecontroller.h \
+		../AdapderExample/gamecubecontrollerint.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gamecubetousbadapter.o ../AdapderExample/gamecubetousbadapter.cpp
+
 main.o: ../AdapderExample/main.cpp ../AdapderExample/mainwindow.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/QMainWindow \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -880,6 +908,11 @@ main.o: ../AdapderExample/main.cpp ../AdapderExample/mainwindow.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtGui/qtouchdevice.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtGui/qicon.h \
+		../AdapderExample/gamecubetousbadapter.h \
+		../AdapderExample/usbcontroller.h \
+		../AdapderExample/USBControllerInt.h \
+		../AdapderExample/gamecubecontroller.h \
+		../AdapderExample/gamecubecontrollerint.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/QApplication \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qapplication.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtCore/qcoreapplication.h \
@@ -996,8 +1029,28 @@ mainwindow.o: ../AdapderExample/mainwindow.cpp ../AdapderExample/mainwindow.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtGui/qtouchdevice.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/jachm/Qt/5.12.7/gcc_64/include/QtGui/qicon.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtCore/QVariant \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/QApplication \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qapplication.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtCore/qeventloop.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtGui/qguiapplication.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtGui/qinputmethod.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/QMenuBar \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qmenubar.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qmenu.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qaction.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qactiongroup.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/QStatusBar \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/qstatusbar.h \
+		/home/jachm/Qt/5.12.7/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../AdapderExample/mainwindow.cpp
+
+usbcontroller.o: ../AdapderExample/usbcontroller.cpp ../AdapderExample/usbcontroller.h \
+		../AdapderExample/USBControllerInt.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o usbcontroller.o ../AdapderExample/usbcontroller.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
